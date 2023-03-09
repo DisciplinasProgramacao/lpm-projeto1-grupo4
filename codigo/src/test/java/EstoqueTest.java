@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +28,14 @@ class EstoqueTest {
     void testCadastrarProduto() {
         assertAll(
                 () -> {
-                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30));
+                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L", 6.0, 2.7, 40, 30));
                     assertTrue(
                             estoque.getProdutos().stream().anyMatch(p -> p.getNome().equals("Coca-cola")),
                             "Deve haver um produto com nome 'Coca-cola' no estoque"
                     );
                 },
                 () -> {
-                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L",6.0, 2.7, 10, 30));
+                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L", 6.0, 2.7, 10, 30));
                     assertEquals(
                             50,
                             getProdutoByName("Coca-cola").getQuantidade(),
@@ -47,7 +49,7 @@ class EstoqueTest {
     void testAdicionarEstoqueNoProduto() {
         assertAll(
                 () -> {
-                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30));
+                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L", 6.0, 2.7, 40, 30));
                     estoque.adicionarEstoqueNoProduto("Coca-cola", 10);
                     assertEquals(
                             50,
@@ -69,7 +71,7 @@ class EstoqueTest {
     void testVenderProduto() {
         assertAll(
                 () -> {
-                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30));
+                    estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L", 6.0, 2.7, 40, 30));
                     estoque.venderProduto("Coca-cola", 10);
                     assertEquals(
                             30,
@@ -97,7 +99,7 @@ class EstoqueTest {
     @Test
     void testGerarRelatorioDeVendas() {
         String nomeProduto = "Coca-cola";
-        Produto produto = new Produto(nomeProduto, "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30);
+        Produto produto = new Produto(nomeProduto, "Refrigerante coca-cola 2L", 6.0, 2.7, 40, 30);
         estoque.cadastrarProduto(produto);
         estoque.venderProduto(nomeProduto, 10);
 
@@ -121,5 +123,22 @@ class EstoqueTest {
 
     @Test
     void imprimirRelatorioVendas() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        String nomeProduto = "Coca-cola";
+        Produto produto = new Produto(nomeProduto, "Refrigerante coca-cola 2L", 6.0, 2.7, 40, 30);
+        estoque.cadastrarProduto(produto);
+        estoque.venderProduto(nomeProduto, 10);
+        RelatoriosVendasDTO relatorio = estoque.gerarRelatorioDeVendas(nomeProduto);
+
+        relatorio.imprimirRelatorio();
+
+        assertEquals(
+                "Relatório do produto: Coca-cola\nItems vendidos: 10\nValor arrecadado: "
+                        + String.format("%.2f", relatorio.valorArrecadado)
+                        + "\nLucro: " + String.format("%.2f", relatorio.lucro) + "\n",
+                outContent.toString()
+        );
     }
 }
