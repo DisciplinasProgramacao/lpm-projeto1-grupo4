@@ -66,7 +66,7 @@ class EstoqueTest {
     }
 
     @Test
-    void venderProduto() {
+    void testVenderProduto() {
         assertAll(
                 () -> {
                     estoque.cadastrarProduto(new Produto("Coca-cola", "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30));
@@ -95,7 +95,28 @@ class EstoqueTest {
     }
 
     @Test
-    void gerarRelatorioDeVendas() {
+    void testGerarRelatorioDeVendas() {
+        String nomeProduto = "Coca-cola";
+        Produto produto = new Produto(nomeProduto, "Refrigerante coca-cola 2L",6.0, 2.7, 40, 30);
+        estoque.cadastrarProduto(produto);
+        estoque.venderProduto(nomeProduto, 10);
+
+        assertAll(
+                () -> {
+                    RelatoriosVendasDTO relatorio = estoque.gerarRelatorioDeVendas(nomeProduto);
+                    assertInstanceOf(RelatoriosVendasDTO.class, relatorio);
+                    assertEquals("Coca-cola", relatorio.nomeProduto);
+                    assertEquals(10, relatorio.itemsVendidos);
+                    assertEquals(produto.getPrecoDeVenda() * 10, relatorio.valorArrecadado);
+                    assertEquals(produto.getMargemDeLucro() * 10, relatorio.lucro);
+                },
+                () -> {
+                    assertNull(
+                            estoque.gerarRelatorioDeVendas("Guarana"),
+                            "Deve retornar null pois não há vendas de Guarana"
+                    );
+                }
+        );
     }
 
     @Test
