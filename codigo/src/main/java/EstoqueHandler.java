@@ -3,7 +3,7 @@ import java.util.Set;
 
 public class EstoqueHandler {
 
-
+    //Esta eh apenas uma pre main de testes, ha uma mais recente e com um melhor uso dentre os arquivos
     public static void main(String[] args) {
         Set<Produto> produtos = new HashSet<>();
         produtos.add(new Produto("Sabonte dove", "Sabonete para banho",1.0, 0.3, 10, 4));

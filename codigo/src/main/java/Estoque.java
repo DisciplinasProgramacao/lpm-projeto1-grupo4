@@ -9,15 +9,26 @@ public class Estoque {
     Set<Produto> produtos;
     Set<ControleDeVendas> vendasProdutos;
 
+    /**
+        Cria um objeto Estoque com conjuntos de produtos e vendas vazios.
+    */
     public Estoque() {
         this.produtos = new HashSet<>();
         this.vendasProdutos = new HashSet<>();
     }
 
+    /**
+        Retorna o conjunto de produtos armazenados no estoque.
+        @return o conjunto de produtos armazenados no estoque
+     */
     public Set<Produto> getProdutos() {
         return produtos;
     }
 
+    /**
+        Define o conjunto de produtos armazenados no estoque.
+        @param produtos o conjunto de produtos armazenados no estoque
+    */
     public void setProdutos(Set<Produto> produtos) {
         this.produtos = produtos;
     }
