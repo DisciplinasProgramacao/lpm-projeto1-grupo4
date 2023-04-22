@@ -14,7 +14,10 @@ public class Main {
             System.out.println("4 - Gerar relatório de vendas do produto");
             System.out.println("5 - Sair");
             opcao = scanner.nextLine();
-
+            //adicionado por João para poder executar.
+            // estoque.cadastrarProduto(new Produto("Bala", "Bala", 100d, 0.50, 100, 50));
+            // estoque.cadastrarProduto(new Produto("Mate", "Mate", 200d, 0.50, 100, 90));
+           
             switch (opcao) {
                 case "1":
                     System.out.println("\nCadastro de Produto");

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EstoqueTest {
 
     Estoque estoque;
+    Produto bala;
 
     private Produto getProdutoByName(String nomeProduto) {
         Optional<Produto> prodOpt = estoque.getProdutos().stream().filter(
@@ -22,6 +23,15 @@ class EstoqueTest {
     @BeforeEach
     void setUp() {
         estoque = new Estoque();
+        bala = new Produto("Bala", "Bala",100d,50d,100,50);
+    }
+
+    
+    //adicionado por Joao. Compare com o teste abaixo. Fazem a mesma coisa.
+    @Test 
+    public void deveCadastrarProdutoNoEstoque(){
+        estoque.cadastrarProduto(bala);
+        assertNotNull(estoque.gerarRelatorio("Bala"));
     }
 
     @Test
@@ -43,6 +53,17 @@ class EstoqueTest {
                     );
                 }
         );
+    }
+
+    ///criado por JOAO, para mostrar que FALHA
+    @Test 
+    public void naoDeveAdicionarEstoqueNegativo(){
+        
+        estoque.cadastrarProduto(bala);
+        estoque.adicionarEstoqueNoProduto("Bala", -10);
+        assertEquals(100,bala.getQuantidade());
+        
+        
     }
 
     @Test

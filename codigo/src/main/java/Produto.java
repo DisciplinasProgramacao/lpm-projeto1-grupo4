@@ -63,6 +63,12 @@ public class Produto {
         validateQuantidades();
     }
 
+    //////////////ACRESCENTADO POR JOÃO
+    public void acrescentarNoEstoque(int quantidade){
+        if(quantidade>0)
+            this.quantidade += quantidade;
+    }
+
     /**
         Retorna o preço de venda do produto.
         O preço de venda é calculado a partir do preço de custo, margem de lucro e taxa de imposto de 18%.
@@ -116,4 +122,6 @@ public class Produto {
             throw new IllegalArgumentException("A quantidade e a quantidade mínima devem ser maiores que zero");
         }
     }
+
+    
 }

@@ -1,13 +1,19 @@
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.print.attribute.HashDocAttributeSet;
+
 import static java.util.Objects.nonNull;
+
+import java.util.HashMap;
 
 public class Estoque {
     Set<Produto> produtos;
     Set<ControleDeVendas> vendasProdutos;
+    Map<String, Produto> meusProdutos; //adicionado por João
 
     /**
         Cria um objeto Estoque com conjuntos de produtos e vendas vazios.
@@ -15,6 +21,7 @@ public class Estoque {
     public Estoque() {
         this.produtos = new HashSet<>();
         this.vendasProdutos = new HashSet<>();
+        this.meusProdutos = new HashMap<>();
     }
 
     /**
@@ -42,6 +49,8 @@ public class Estoque {
     public void cadastrarProduto(Produto produto) {
         Optional<Produto> prodEncontrado  = produtos.stream().filter(p -> p.getNome().equals(produto.getNome())).findFirst();
         prodEncontrado.ifPresentOrElse(value -> value.setQuantidade(value.getQuantidade() + produto.getQuantidade()), () -> produtos.add(produto));
+
+        this.meusProdutos.put(produto.getDescricao(), produto); //adicionado por joao
     }
 
     /**
@@ -57,6 +66,15 @@ public class Estoque {
                 }
         );
     }
+
+    //////CRIADO POR JOAO
+    public void adicionarProdutoNoEstoque(String nomeProduto, Integer quantidade) {
+        Produto prod = meusProdutos.get(nomeProduto);
+        if(prod!=null){
+            prod.acrescentarNoEstoque(quantidade);
+        }
+    }
+
 
     /**
         Realiza a venda de uma determinada quantidade de um produto com o nome especificado.
@@ -101,6 +119,19 @@ public class Estoque {
         }
         return null;
     }
+
+    /////////////////////////ADICIONADO POR JOÃO. Compare com o código acima. 
+    public String gerarRelatorio(String nomeProduto) {
+        String relat = null;
+        Produto produto = this.meusProdutos.get(nomeProduto);
+
+        if(produto!=null) 
+            relat =produto.toString();  
+
+        return relat;
+    }
+
+
 
     /**
         Gera e imprime um relatório de vendas para um produto com o nome especificado.
